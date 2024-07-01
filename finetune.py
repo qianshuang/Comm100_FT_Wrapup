@@ -41,7 +41,7 @@ def process_func(example):
     input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.pad_token_id]
     attention_mask = instruction["attention_mask"] + response["attention_mask"] + [1]
     labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.pad_token_id]
-    if len(input_ids) > 4500:
+    if len(input_ids) > 10000:
         print("data too long.----------------{}".format(example['Answer']))
         return {"input_ids": [], "attention_mask": [], "labels": []}
     return {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}
