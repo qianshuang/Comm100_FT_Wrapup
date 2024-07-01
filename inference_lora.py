@@ -16,8 +16,8 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 start_time = time.time()
 
-model_dir = "/opt/models/Meta-Llama-3-70B-Instruct"
-lora_model_dir = "/opt/models/Comm100-Llama-3-70B-Instruct-Lora"
+model_dir = "/opt/models/Meta-Llama-3-8B-Instruct"
+lora_model_dir = "/opt/models/Comm100-Llama-3-8B-Instruct-Lora"
 
 # merge model
 tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=False, trust_remote_code=True)
