@@ -25,7 +25,7 @@ tokenizer.pad_token = tokenizer.eos_token  # 不需要添加
 model = AutoPeftModelForCausalLM.from_pretrained(lora_model_dir, device_map="cuda:0", torch_dtype=torch.bfloat16)
 print("model loaded successfully, cost: {} seconds.".format(time.time() - start_time))
 
-csv_res_file = "data/test_result_Comm100.csv"
+csv_res_file = "data/test_result.csv"
 test_data = load_json_file("data/test.json")
 instructions = []
 pred_answers = []

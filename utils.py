@@ -56,3 +56,11 @@ def load_json_file(json_file_path):
 def write_json_file(json_, json_file_path):
     with open(json_file_path, 'w', encoding='utf-8') as json_file:
         json.dump(json_, json_file)
+
+
+def read_txt_lines(txt_file_path):
+    lines = []
+    with open(txt_file_path, 'r', encoding='utf-8') as file:
+        for line in file:
+            lines.append(line.strip())
+    return lines
