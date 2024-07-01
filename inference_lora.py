@@ -38,13 +38,9 @@ for i, data in enumerate(test_data):
     dialogue = match.group(1).strip()
     instructions.append(dialogue)
 
-    print("RE cost: {} seconds.".format(i + 1, time.time() - start_time))
-
     messages = [{"role": "system", "content": sys_message}, {"role": "user", "content": data["Instruction"]}]
     text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     model_inputs = tokenizer([text], return_tensors="pt").to('cuda:0')
-
-    print("tokenizer cost: {} seconds.".format(i + 1, time.time() - start_time))
 
     try:
         generated_ids = model.generate(model_inputs.input_ids, max_new_tokens=1024, do_sample=False, eos_token_id=tokenizer.encode('<|eot_id|>')[0])
