@@ -5,7 +5,7 @@ from utils import *
 answers = []
 json_list = load_json_file("data/test.json")
 for index, js_ in enumerate(json_list):
-    if index <= 174:
+    if index <= 199:
         answers.append(json.loads(js_["Answer"]))
 
 pred_answers = []
