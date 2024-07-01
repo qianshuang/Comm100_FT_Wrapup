@@ -38,7 +38,13 @@ def process_data(in_file, out_file):
     df = pd.read_csv(in_file)
     for index, row in df.iterrows():
         qa_dict = {"Instruction": instruction_template.format(row['Content'].strip()),
-                   "Answer": {"Category": str(row['Category']).strip(), "Case_Status": str(row['Case_Status']).strip(), "Profit_Center": str(row['Profit_Center']).strip()}}
+                   "Answer": json.dumps(
+                       {
+                           "Category": "" if str(row['Category']).strip() == "nan" else row['Category'].strip(),
+                           "Case_Status": "" if str(row['Case_Status']).strip() == "nan" else row['Case_Status'].strip(),
+                           "Profit_Center": "" if str(row['Profit_Center']).strip() == "nan" else row['Profit_Center'].strip()
+                       }
+                   )}
         qa_dict_list.append(qa_dict)
     write_json_file(qa_dict_list, out_file)
     print("qa_dict length：{}".format(len(qa_dict_list)))
