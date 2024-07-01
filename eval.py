@@ -21,4 +21,4 @@ def calculate_score(row):
 df['score'] = df.apply(calculate_score, axis=1)
 print(df.head())
 # df.to_csv('data/test_result_with_score.csv', index=False)
-print("Score: {}".format(df['A'].sum() / (3 * len(df))))
+print("Score: {}".format(df['score'].sum() / (3 * len(df))))
