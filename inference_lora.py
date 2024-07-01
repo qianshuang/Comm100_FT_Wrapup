@@ -22,7 +22,7 @@ lora_model_dir = "/opt/models/Comm100-Llama-3-8B-Instruct-Lora"
 # merge model
 tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=False, trust_remote_code=True)
 tokenizer.pad_token = tokenizer.eos_token  # 不需要添加
-model = AutoPeftModelForCausalLM.from_pretrained(lora_model_dir, device_map="auto", torch_dtype=torch.bfloat16)
+model = AutoPeftModelForCausalLM.from_pretrained(lora_model_dir, device_map="cuda:0", torch_dtype=torch.bfloat16)
 print("model loaded successfully, cost: {} seconds.".format(time.time() - start_time))
 
 csv_res_file = "data/test_result_Comm100.csv"
