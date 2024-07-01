@@ -22,7 +22,7 @@ lora_model_dir = "/opt/models/Comm100-Llama-3-70B-Instruct-Lora"
 # merge model
 tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=False, trust_remote_code=True)
 tokenizer.pad_token = tokenizer.eos_token  # 不需要添加
-model = AutoPeftModelForCausalLM.from_pretrained(lora_model_dir, device_map="cuda:0", torch_dtype=torch.bfloat16)
+model = AutoPeftModelForCausalLM.from_pretrained(lora_model_dir, device_map="auto", torch_dtype=torch.bfloat16)
 print("model loaded successfully, cost: {} seconds.".format(time.time() - start_time))
 
 csv_res_file = "data/test_result.csv"
@@ -40,7 +40,7 @@ for i, data in enumerate(test_data):
 
     messages = [{"role": "system", "content": sys_message}, {"role": "user", "content": data["Instruction"]}]
     text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    model_inputs = tokenizer([text], return_tensors="pt").to('cuda:0')
+    model_inputs = tokenizer([text], return_tensors="pt").to('cuda')
 
     try:
         generated_ids = model.generate(model_inputs.input_ids, max_new_tokens=1024, do_sample=False, eos_token_id=tokenizer.encode('<|eot_id|>')[0])
