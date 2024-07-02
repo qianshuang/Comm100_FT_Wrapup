@@ -47,7 +47,7 @@ def process_func(example):
     return {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}
 
 
-df = pd.read_json('data/train.json')
+df = pd.read_json('data/train.json', encoding='utf-8')
 df = df.sample(frac=1).reset_index(drop=True)  # shuffle
 max_tokens_in_train = sorted([len(tokenizer(" ".join(df.iloc[row_idx].astype(str)), add_special_tokens=False)["input_ids"]) for row_idx in range(len(df))], reverse=True)[:10]
 ds = Dataset.from_pandas(df)
