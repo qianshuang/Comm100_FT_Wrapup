@@ -32,10 +32,13 @@ from prompt_helper import *
 
 # 补充训练数据
 df_pre = pd.read_csv('data/train.csv', encoding='utf-8')
-df = pd.read_excel("data/chats_20240628_gaming_finetune.xlsx", engine='openpyxl')
+
+df = pd.read_csv("data/Chats_20240708.csv", encoding='utf-8')
 df = df[["Content", "Category"]]
 df['Case_Status'] = ''
 df['Profit_Center'] = ''
+df.drop_duplicates(inplace=True)
+df = df.iloc[200:]
 
 df_combined = pd.concat([df_pre, df], ignore_index=True)
 df_combined.drop_duplicates(inplace=True)

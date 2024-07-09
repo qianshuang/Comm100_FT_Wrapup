@@ -1,30 +1,41 @@
 # -*- coding: utf-8 -*
 
+import pandas as pd
 from utils import *
+from prompt_helper import *
 
-answers = []
-json_list = load_json_file("data/test.json")
-for index, js_ in enumerate(json_list):
-    if index <= 199:
-        answers.append(json.loads(js_["Answer"]))
 
-pred_answers = []
-for line in read_txt_lines("data/test_res.txt"):
-    try:
-        pred_answers.append(json.loads(line))
-    except:
-        # print(line)
-        pass
-print("answers length: {}, pred_answers length: {}".format(len(answers), len(pred_answers)))
+def process_data(in_file, out_file):
+    qa_dict_list = []
+    df_ = pd.read_csv(in_file, encoding='utf-8')
+    for index, row in df_.iterrows():
+        if str(row['Content']).strip() in ["", "nan"]:
+            continue
+        qa_dict = {"Instruction": instruction_template.format(row['Content'].strip()),
+                   "Answer": json.dumps(
+                       {
+                           "Category": "" if str(row['Category']).strip() == "nan" else row['Category'].strip(),
+                           "Case_Status": "" if str(row['Case_Status']).strip() == "nan" else row['Case_Status'].strip(),
+                           "Profit_Center": "" if str(row['Profit_Center']).strip() == "nan" else row['Profit_Center'].strip()
+                       }
+                   )}
+        qa_dict_list.append(qa_dict)
+    write_json_file(qa_dict_list, out_file)
+    print("qa_dict length：{}".format(len(qa_dict_list)))
 
-score = 0
-for i in range(len(pred_answers)):
-    answer = answers[i]
-    pred_answer = pred_answers[i]
-    print("answer_R: {}\nanswer_P: {}\n".format(answer, pred_answer))
 
-    for key in answer:
-        if key in pred_answer and answer[key] == pred_answer[key]:
-            score += 1
-print(score)
-print(score / (3 * len(pred_answers)))
+# 数据预处理，拆分训练测试集
+columns_to_convert = ['Content', 'Category']
+df = pd.read_csv("data/Chats_20240708.csv", encoding='utf-8')
+df = df[columns_to_convert]
+df.drop_duplicates(inplace=True)
+df[columns_to_convert] = df[columns_to_convert].astype(str)
+df['Case_Status'] = ''
+df['Profit_Center'] = ''
+print(df)
+
+test_set = df.head(200)
+test_set.to_csv('data/test_gaming.csv', index=False)
+print(test_set)
+
+process_data("data/test_gaming.csv", "data/test_gaming.json")
