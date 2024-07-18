@@ -7,7 +7,7 @@ import time
 
 start_time = time.time()
 
-model_dir = "/opt/share/chatglm/meta/models/Meta-Llama-3-8B-Instruct"
+model_dir = "/opt/share/chatglm/models/meta/Meta-Llama-3-8B-Instruct"
 lora_model_dir = "/opt/qs/models/Comm100-Llama-3-8B-Instruct-Lora"
 finetuned_model_dir = "/opt/qs/models/Comm100-Llama-3-8B-Instruct"
 
