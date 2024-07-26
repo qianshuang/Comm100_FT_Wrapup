@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
+from sklearn.svm import SVC
 
 train_df = pd.read_csv("data/train.csv", encoding='utf-8')
 test_df = pd.read_csv("data/test.csv", encoding='utf-8')
@@ -23,7 +24,8 @@ y_train = train_df['Category']
 y_test = test_df['Category']
 
 # 3. 训练随机森林分类器
-clf = RandomForestClassifier()
+# clf = RandomForestClassifier()
+clf = SVC(kernel='rbf')
 clf.fit(X_train, y_train)
 print("finishing training...")
 
