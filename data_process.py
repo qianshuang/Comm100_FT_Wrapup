@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*
 
 import pandas as pd
+from sklearn.model_selection import train_test_split
+
 from utils import *
 from prompt_helper import *
 
@@ -31,19 +33,23 @@ from prompt_helper import *
 # print("train length: {}, test length: {}".format(len(train_set), len(test_set)))
 
 # 补充训练数据
-df_pre = pd.read_csv('data/train.csv', encoding='utf-8')
+# df_pre = pd.read_csv('data/train.csv', encoding='utf-8')
+# df = pd.read_csv("data/Chats_20240708.csv", encoding='utf-8')
+# df = df[["Content", "Category"]]
+# df['Case_Status'] = ''
+# df['Profit_Center'] = ''
+# df.drop_duplicates(inplace=True)
+# df = df.iloc[200:]
+# df_combined = pd.concat([df_pre, df], ignore_index=True)
 
-df = pd.read_csv("data/Chats_20240708.csv", encoding='utf-8')
+df = pd.read_excel("data/train_1_GPT4o筛选.xlsx", engine='openpyxl')
 df = df[["Content", "Category"]]
 df['Case_Status'] = ''
-df['Profit_Center'] = ''
 df.drop_duplicates(inplace=True)
-df = df.iloc[200:]
-
-df_combined = pd.concat([df_pre, df], ignore_index=True)
-df_combined.drop_duplicates(inplace=True)
-df_combined.to_csv('data/train.csv', encoding='utf-8', index=False)
-print("train length: {}".format(len(df_combined)))
+train_df, test_df = train_test_split(df, test_size=0.1, random_state=42)
+train_df.to_csv('data/train.csv', encoding='utf-8', index=False)
+test_df.to_csv('data/test.csv', encoding='utf-8', index=False)
+print("train length: {}, test length: {}".format(len(train_df), len(test_df)))
 
 
 # 生成finetune data.json
@@ -57,8 +63,7 @@ def process_data(in_file, out_file):
                    "Answer": json.dumps(
                        {
                            "Category": "" if str(row['Category']).strip() == "nan" else row['Category'].strip(),
-                           "Case_Status": "" if str(row['Case_Status']).strip() == "nan" else row['Case_Status'].strip(),
-                           "Profit_Center": "" if str(row['Profit_Center']).strip() == "nan" else row['Profit_Center'].strip()
+                           "Case_Status": "" if str(row['Case_Status']).strip() == "nan" else row['Case_Status'].strip()
                        }
                    )}
         qa_dict_list.append(qa_dict)
@@ -67,4 +72,4 @@ def process_data(in_file, out_file):
 
 
 process_data("data/train.csv", "data/train.json")
-# process_data("data/test.csv", "data/test.json")
+process_data("data/test.csv", "data/test.json")
